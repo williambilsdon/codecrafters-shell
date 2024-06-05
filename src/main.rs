@@ -11,7 +11,7 @@ fn main() {
         let stdin = io::stdin();
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
-        let trimmed_input = input.trim().split_whitespace().collect();
+        let trimmed_input = input.split_whitespace().collect();
         match Command::create_command(trimmed_input) {
             Ok(command) => command.execute(),
             Err(err) => println!("{}", err),

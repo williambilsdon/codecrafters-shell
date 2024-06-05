@@ -7,9 +7,9 @@ pub fn create(input: Vec<&str>) -> Result<Command, String> {
         return Err(format!("{}: too few args provided", input[0]).to_string());
     }
     match input[1].parse() {
-        Ok(parse_result) => return Ok(Command::Exit(parse_result)),
-        Err(_) => return Err("Failed to parse args".to_string()),
-    };
+        Ok(parse_result) => Ok(Command::Exit(parse_result)),
+        Err(_) => Err("Failed to parse args".to_string()),
+    }
 }
 
 pub fn exectute(status_code: &i32) {

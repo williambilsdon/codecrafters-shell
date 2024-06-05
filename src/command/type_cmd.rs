@@ -1,13 +1,10 @@
-use std::{env::var_os, ffi::OsString, path::Path};
+use std::{env::var_os, path::Path};
 
 use super::Command;
 
 pub fn create(input: Vec<&str>) -> Result<Command, String> {
     Ok(Command::Type(
-        input[1..]
-            .into_iter()
-            .map(|input| input.to_string())
-            .collect(),
+        input[1..].iter().map(|input| input.to_string()).collect(),
     ))
 }
 
@@ -36,18 +33,16 @@ fn is_in_path(param: &str) -> Option<String> {
     match var_os("PATH") {
         Some(path) => {
             if let Ok(path_string) = path.into_string() {
-                let each_path: Vec<&Path> =
-                    path_string.split(':').map(|path| Path::new(path)).collect();
-                let result = each_path.into_iter().fold(None, |mut acc, path| {
+                let each_path: Vec<&Path> = path_string.split(':').map(Path::new).collect();
+                each_path.into_iter().fold(None, |mut acc, path| {
                     for dir_entry in path.read_dir().unwrap() {
                         let file_name = dir_entry.unwrap().file_name();
-                        if file_name == OsString::from(param) {
+                        if file_name == *param {
                             acc = Some(path.to_str().unwrap().to_string())
                         }
                     }
                     acc
-                });
-                result
+                })
             } else {
                 None
             }
